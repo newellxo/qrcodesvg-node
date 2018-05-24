@@ -1,106 +1,103 @@
-'use strict';
+/* global beforeEach, it, describe */
 
-var chai = require('chai');
-chai.should();
+const chai = require('chai')
+const Qrcodesvg = require('../lib/index.js')
 
-var expect = chai.expect;
+chai.should()
 
-var Qrcodesvg;
-var qrCodeSize;
+const { expect } = chai
+let qrCodeSize
 
 beforeEach(function () {
+  qrCodeSize = 100
 
-    Qrcodesvg  = require('../lib/index.js');
+})
 
-    qrCodeSize = 100;
+describe('Qrcodesvg', function () {
 
-});
+  describe('constructor()', function () {
 
-describe ("Qrcodesvg", function() {
+    it('needs an input', function () {
+      (function () {
+        Qrcodesvg()
+      }).should.Throw('no input set')
+    })
 
-    describe("constructor()", function() {
+    it('needs a QR code size', function () {
 
-	it("needs an input", function() {
-	    (function () {
-		new Qrcodesvg();
-	    }).should.Throw('no input set');
-	});
+      (function () {
+        Qrcodesvg('Hello')
+      }).should.Throw('no size set')
+    })
 
-	it("needs a QR code size", function() {
-
-	    (function () {
-		new Qrcodesvg("Hello");
-	    }).should.Throw('no size set');
-	});
-
-    });
+  })
 
 
-    describe("generate()", function() {
+  describe('generate()', function () {
 
-	it ("returns a string", function() {
-	    var data = new Qrcodesvg("Hello", qrCodeSize).generate();
+    it('returns a string', function () {
+      const data = new Qrcodesvg('Hello', qrCodeSize).generate()
 
-	    expect( data ).to.be.a("string");
-	    expect( data ).not.to.be.empty;
-	});
-
-
-	it ("applies size", function() {
-	    var data 		= new Qrcodesvg("Hello", qrCodeSize).generate();
-
-	    var widthRegExp 	= new RegExp('<svg[^>]* width=[\'\"]?' + qrCodeSize, 'i' );
-	    var heightRegExp 	= new RegExp('<svg[^>]* height=[\'\"]?' + qrCodeSize, 'i' );
-
-	    var matchWidth 	= data.match(widthRegExp);
-	    var matchHeight 	= data.match(heightRegExp);
-
-	    expect( matchWidth ).not.to.be.null;
-	    expect( matchHeight ).not.to.be.null;
-
-	});
+      expect(data).to.be.a('string')
+      expect(data).not.to.be.empty
+    })
 
 
-	it ("applies attribute", function() {
-	    var fillName		= "fill";
-	    var fillValue	= "#00FF00";
-	    var attributes 	= {};
+    it('applies size', function () {
+      const data = new Qrcodesvg('Hello', qrCodeSize).generate()
 
-	    attributes[fillName] = fillValue;
+      const widthRegExp = new RegExp(`<svg[^>]* width=['\"]?${qrCodeSize}`, 'i')
+      const heightRegExp = new RegExp(`<svg[^>]* height=['\"]?${qrCodeSize}`, 'i')
 
-	    var qrcode 		= new Qrcodesvg("Hello", qrCodeSize);
+      const matchWidth = data.match(widthRegExp)
+      const matchHeight = data.match(heightRegExp)
 
-	    var data		= qrcode.generate({},attributes);
+      expect(matchWidth).not.to.be.null
+      expect(matchHeight).not.to.be.null
 
-	    var fillRegExp 	= new RegExp( fillName + '=[\'\"]?' + fillValue, 'ig' );
-
-	    var matchAttribute	= data.match(fillRegExp);
-
-	    expect( matchAttribute ).to.be.a("array");
-	    expect( matchAttribute ).to.have.length.above(1);
-
-	});
-
-	it ("returns an error when drawing method doesn't exist", function() {
-	    var drawingMethod = "make-it-like-andy-warhol-would";
-	    var qrcode	  = new Qrcodesvg("Hello", qrCodeSize);
-
-	    (function () {
-		qrcode.generate({'method' : drawingMethod});
-	    }).should.Throw('Drawing method not found');
-	});
+    })
 
 
-    });
+    it('applies attribute', function () {
+      const fillName = 'fill'
+      const fillValue = '#00FF00'
+      const attributes = {}
 
-    describe("background()", function() {
-	it ("needs settings or attributes", function() {
-	    var qrcode	  = new Qrcodesvg("Hello", qrCodeSize);
-	    
-	    (function () {
-		qrcode.background();
-	    }).should.Throw('background method needs at least settings or attributes');
-	});
-    });
-    
-});
+      attributes[fillName] = fillValue
+
+      const qrcode = new Qrcodesvg('Hello', qrCodeSize)
+
+      const data = qrcode.generate({}, attributes)
+
+      const fillRegExp = new RegExp(`${fillName}=['\"]?${fillValue}`, 'ig')
+
+      const matchAttribute = data.match(fillRegExp)
+
+      expect(matchAttribute).to.be.a('array')
+      expect(matchAttribute).to.have.length.above(1)
+
+    })
+
+    it('returns an error when drawing method doesn\'t exist', function () {
+      const drawingMethod = 'make-it-like-andy-warhol-would'
+      const qrcode = new Qrcodesvg('Hello', qrCodeSize);
+
+      (function () {
+        qrcode.generate({ method: drawingMethod })
+      }).should.Throw('Drawing method not found')
+    })
+
+
+  })
+
+  describe('background()', function () {
+    it('needs settings or attributes', function () {
+      const qrcode = new Qrcodesvg('Hello', qrCodeSize);
+
+      (function () {
+        qrcode.background()
+      }).should.Throw('background method needs at least settings or attributes')
+    })
+  })
+
+})

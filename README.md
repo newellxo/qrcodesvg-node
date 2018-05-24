@@ -37,6 +37,24 @@ var data = qrcode.generate({
                             });
 ```
 
+or draw eye in circle
+```js
+var Qrcodesvg = require('qrcodesvg');
+
+//Generate a Qrcode with a correction level of 2
+//and affect randomly one of the colors defined to patterns
+var qrcode = new Qrcodesvg("Hello!", 400, {"ecclevel" : 2, eye: 'circle'});
+
+var data = qrcode.generate({
+                                "method":"circle",
+                                "fill-colors":["#1C46ED","#021872","#0125C4"],
+                                "radius": 5
+                            },
+                            {
+                                "stroke-width":0.001
+                            });
+```
+
 ## Examples
 
 ### Server-side
