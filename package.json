@@ -17,7 +17,8 @@
   ],
   "dependencies": {
     "qr-encoder": ">=1.1.0",
-    "svg-builder": "git+https://github.com/pinchtools/svg-builder.git"
+    "svg-builder": "git+https://github.com/pinchtools/svg-builder.git",
+    "svg2png": "^4.1.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.1.4",
